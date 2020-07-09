@@ -1,0 +1,3 @@
+[submodule "saimiri"]
+	path = saimiri
+	url = ../saimiri.git

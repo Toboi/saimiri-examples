@@ -1,0 +1,8 @@
+application {
+    mainClassName = 'de.toboidev.saimiri.examples.simpleDeferredLighting.Main'
+}
+
+dependencies {
+    compile "de.toboidev:saimiri-base"
+    compile "de.toboidev:saimiri-gfx"
+}

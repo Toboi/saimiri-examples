@@ -1,0 +1,9 @@
+rootProject.name = 'saimiri-examples'
+
+includeBuild 'saimiri'
+
+include ':simpleDeferredLighting'
+include ':simpleCollision'
+include ':esCollision'
+include ':tmx'
+include ':tmxCollision'

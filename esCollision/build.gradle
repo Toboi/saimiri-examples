@@ -1,0 +1,9 @@
+application {
+    mainClassName = 'de.toboidev.saimiri.examples.esCollision.Main'
+}
+
+dependencies {
+    compile "de.toboidev:saimiri-base"
+    compile "de.toboidev:saimiri-gfx"
+    compile "de.toboidev:saimiri-game"
+}
