@@ -7,3 +7,5 @@ include ':simpleCollision'
 include ':esCollision'
 include ':tmx'
 include ':tmxCollision'
+
+include ':assets'

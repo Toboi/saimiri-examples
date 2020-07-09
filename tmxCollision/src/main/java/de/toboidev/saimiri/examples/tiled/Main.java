@@ -6,13 +6,10 @@ import com.jme3.audio.AudioListenerState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Quad;
 import com.simsilica.es.EntityData;
 import com.simsilica.es.EntityId;
 import com.simsilica.es.base.DefaultEntityData;
@@ -37,24 +34,20 @@ import de.toboidev.saimiri.gfx.render.CameraControllerState;
 import de.toboidev.saimiri.gfx.render.SpriteRenderState;
 import de.toboidev.saimiri.tmx.MapCollision;
 import de.toboidev.saimiri.tmx.MapRenderer;
-import de.toboidev.saimiri.tmx.TMXLoader;
-import de.toboidev.saimiri.tmx.data.TMXMap;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import de.toboidev.saimiri.tmx.TiledLoader;
+import org.tiledreader.TiledMap;
+import org.tiledreader.TiledReader;
 
 /**
  * @author Eike Foede <toboi@toboidev.de>
  */
 public class Main extends SimpleApplication implements ActionListener {
-    TMXMap map;
+    TiledMap map;
     private World world = new World();
     private EntityData ed;
     private EntityId playerId;
-    private int playerSizeX = 20;
-    private int playerSizeY = 30;
+    private int playerSizeX = 127;
+    private int playerSizeY = 127;
     private boolean platformerControls = true;
     private boolean deferredLighting = false;
     private DeferredLightingProcessor deferredLightingProcessor;
@@ -64,21 +57,25 @@ public class Main extends SimpleApplication implements ActionListener {
     }
 
     public static void main(String[] args) {
+
         Main m = new Main();
         m.start();
     }
 
     @Override public void simpleInitApp() {
+        renderer.setLinearizeSrgbImages(false);
         CameraControllerState.setupCamera(cam, 0, 500);
         viewPort.getQueue().setGeometryComparator(RenderQueue.Bucket.Opaque, new com.jme3.renderer.queue.GuiComparator());
         setPauseOnLostFocus(false);
 
-        assetManager.registerLoader(TMXLoader.class, "tmx", "tsx");
-        map = (TMXMap) assetManager.loadAsset("Maps/desert.tmx");
+        assetManager.registerLoader(TiledLoader.class, "tmx");
+//        map = (TiledMap) assetManager.loadAsset("testMap.tmx");
+        map = (TiledMap) assetManager.loadAsset("Maps/desert.tmx");
 
         MapRenderer mr = new MapRenderer();
         mr.assetManager = assetManager;
-        Spatial s = mr.getSpatial(map);
+
+        Spatial s = mr.getSpatial((TiledMap)assetManager.loadAsset("Maps/desert.tmx"));
         rootNode.attachChild(s);
 
 
@@ -103,6 +100,7 @@ public class Main extends SimpleApplication implements ActionListener {
         setupGroundEntity();
 
         deferredLightingProcessor = new DeferredLightingProcessor(assetManager);
+        deferredLightingProcessor.setAmbientLight(ColorRGBA.Black);
         stateManager.attach(new LightSystem(deferredLightingProcessor));
 
     }
@@ -142,12 +140,12 @@ public class Main extends SimpleApplication implements ActionListener {
                 new Rotation(),
                 new Size(playerSizeX, playerSizeY),
                 new RenderComponent(0),
-                new CameraController(1400),
+                new CameraController(600),
                 new SpriteComponent("Common/Textures/MissingTexture.png"),
                 new DynamicBodyComponent(),
                 new PlatformerCharacterComponent(),
                 new PlatformerInput(),
-                new PointLightComponent(700, ColorRGBA.White, 0.3f));
+                new PointLightComponent(100, ColorRGBA.White, 0.1f));
     }
 
     private void setupGroundEntity() {

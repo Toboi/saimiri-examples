@@ -5,11 +5,10 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioListenerState;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
-import de.toboidev.saimiri.gfx.deferred.DeferredLightingProcessor;
 import de.toboidev.saimiri.gfx.render.CameraControllerState;
 import de.toboidev.saimiri.tmx.MapRenderer;
-import de.toboidev.saimiri.tmx.TMXLoader;
-import de.toboidev.saimiri.tmx.data.TMXMap;
+import de.toboidev.saimiri.tmx.TiledLoader;
+import org.tiledreader.TiledMap;
 
 /**
  * @author Eike Foede <toboi@toboidev.de>
@@ -33,8 +32,8 @@ public class Main extends SimpleApplication
         CameraControllerState.setupCamera(cam, 0, 500);
         viewPort.getQueue().setGeometryComparator(RenderQueue.Bucket.Opaque, new com.jme3.renderer.queue.GuiComparator());
         setPauseOnLostFocus(false);
-        assetManager.registerLoader(TMXLoader.class, "tmx", "tsx");
-        TMXMap map = (TMXMap)assetManager.loadAsset("Maps/desert.tmx");
+        assetManager.registerLoader(TiledLoader.class, "tmx", "tsx");
+        TiledMap map = (TiledMap) assetManager.loadAsset("Maps/desert.tmx");
 
         MapRenderer mr = new MapRenderer();
         mr.assetManager = assetManager;

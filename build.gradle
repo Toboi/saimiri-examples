@@ -5,12 +5,12 @@ project.ext.sio2 = [v: '1.5.0']
 subprojects {
     apply plugin: "java"
     apply plugin: "application"
-
-    applicationDefaultJvmArgs = ["-XX:+UseConcMarkSweepGC", "-XX:+TieredCompilation"]
+//-Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M
+    applicationDefaultJvmArgs = ["-Xmx8G", "-XX:+UseG1GC", "-XX:+UnlockExperimentalVMOptions", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=32M", "-XX:+TieredCompilation"]
 
     group 'de.toboidev'
 
-    sourceCompatibility = 1.7
+    sourceCompatibility = 1.8
 
     repositories {
         jcenter()
@@ -28,11 +28,28 @@ subprojects {
 
         // https://mvnrepository.com/artifact/com.simsilica/sio2
         compile group: 'com.simsilica', name: 'sio2', version: "${sio2.v}"
+
+        runtime project(':assets')
+
     }
 
     buildDir = new File(rootProject.projectDir, "build/" + project.name)
 
     compileJava {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}
+
+project(":assets") {
+    apply plugin: "java"
+
+    buildDir = rootProject.file("build/assets")
+
+    sourceSets {
+        main {
+            resources {
+                srcDir '.'
+            }
+        }
     }
 }
